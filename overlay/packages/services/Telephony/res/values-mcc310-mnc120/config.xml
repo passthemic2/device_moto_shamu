@@ -24,6 +24,8 @@
     <!-- Show enabled lte option for lte device -->
     <bool name="config_enabled_lte" translatable="false">true</bool>
     <!-- carrier settings menu -->
+    <!-- Flag to enable VVM3 visual voicemail. VVM3 is used by Verizon Wireless. -->
+    <bool name="vvm3_enabled">true</bool>
     <string name="carrier_settings" translatable="false">com.android.sdm.plugins.sprintdm</string>
     <string name="carrier_settings_menu" translatable="false">com.android.sdm.plugins.sprintdm.SprintCarrierSettingsActivity</string>
 </resources>
