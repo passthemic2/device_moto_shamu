@@ -125,7 +125,8 @@ USE_DEVICE_SPECIFIC_CAMERA:= true
 
 BOARD_HAL_STATIC_LIBRARIES += libdumpstate.shamu
 
-USE_CLANG_PLATFORM_BUILD := true
+# Use Snapdragon LLVM for Nightlies, if available
+TARGET_USE_SDCLANG := true
 
 TARGET_FS_CONFIG_GEN += device/moto/shamu/config.fs
 

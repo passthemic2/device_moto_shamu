@@ -30,6 +30,7 @@
 #include <stdbool.h>
 
 #define LOG_TAG "PowerHAL"
+#define LOG_NDEBUG 0
 #include <utils/Log.h>
 
 #include <hardware/hardware.h>
@@ -94,7 +95,7 @@ static void coresonline(int off)
     }
 
     if (rc < 0) {
-        ALOGE("%s: failed to send: %s", __func__, strerror(errno));
+        //ALOGE("%s: failed to send: %s", __func__, strerror(errno));
     }
 }
 
@@ -122,7 +123,7 @@ static void enc_boost(int off)
     }
 
     if (rc < 0) {
-        ALOGE("%s: failed to send: %s", __func__, strerror(errno));
+        //ALOGE("%s: failed to send: %s", __func__, strerror(errno));
     }
 }
 
@@ -148,29 +149,6 @@ static void process_video_encode_hint(void *metadata)
     }
 }
 
-
-static void touch_boost()
-{
-    int rc, fd;
-    pid_t client;
-    char data[MAX_LENGTH];
-    char buf[MAX_LENGTH];
-
-    if (client_sockfd < 0) {
-        ALOGE("%s: boost socket not created", __func__);
-        return;
-    }
-
-    client = getpid();
-
-    snprintf(data, MAX_LENGTH, "1:%d", client);
-    rc = sendto(client_sockfd, data, strlen(data), 0,
-        (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
-    if (rc < 0) {
-        ALOGE("%s: failed to send: %s", __func__, strerror(errno));
-    }
-}
-
 static void low_power(int on)
 {
     int rc;
@@ -188,13 +166,13 @@ static void low_power(int on)
         snprintf(data, MAX_LENGTH, "10:%d", client);
         rc = sendto(client_sockfd, data, strlen(data), 0, (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
         if (rc < 0) {
-            ALOGE("%s: failed to send: %s", __func__, strerror(errno));
+            //ALOGE("%s: failed to send: %s", __func__, strerror(errno));
         }
     } else {
         snprintf(data, MAX_LENGTH, "9:%d", client);
         rc = sendto(client_sockfd, data, strlen(data), 0, (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
         if (rc < 0) {
-            ALOGE("%s: failed to send: %s", __func__, strerror(errno));
+            //ALOGE("%s: failed to send: %s", __func__, strerror(errno));
         }
     }
 }
@@ -212,7 +190,6 @@ static void power_set_interactive(__attribute__((unused)) struct power_module *m
     ALOGV("%s %s", __func__, (on ? "ON" : "OFF"));
     if (on) {
         coresonline(0);
-        touch_boost();
     } else {
         coresonline(1);
     }
@@ -224,7 +201,6 @@ static void set_power_profile(int profile) {
         return;
 
     ALOGV("%s: profile=%d", __func__, profile);
-
     if (profile == PROFILE_BALANCED) {
         low_power(0);
         coresonline(1);
@@ -296,8 +272,7 @@ static void power_hint( __attribute__((unused)) struct power_module *module,
         case POWER_HINT_LAUNCH:
             if (current_power_profile == PROFILE_POWER_SAVE)
                 return;
-            ALOGV("POWER_HINT_INTERACTION");
-            touch_boost();
+            //ALOGV("POWER_HINT_INTERACTION");
             break;
         case POWER_HINT_VIDEO_ENCODE:
             if (current_power_profile != PROFILE_BALANCED)
