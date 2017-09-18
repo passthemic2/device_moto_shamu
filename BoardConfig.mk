@@ -140,4 +140,7 @@ TARGET_FS_CONFIG_GEN += device/moto/shamu/config.fs
 DEVICE_MANIFEST_FILE := device/moto/shamu/manifest.xml
 DEVICE_MATRIX_FILE := device/moto/shamu/compatibility_matrix.xml
 
+# Recovery
+LZMA_RAMDISK_TARGETS := recovery
+
 -include vendor/moto/shamu/BoardConfigVendor.mk
